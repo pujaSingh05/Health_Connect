@@ -1,20 +1,60 @@
-import React from "react";
-import AdminMenu from "../../components/Layout/AdminMenu";
-import Layout from "./../../components/Layout/Layout";
-
+import React, { useEffect, useState } from "react";
+import Layout from "../../componenets/Layout";
+import axios from "axios";
+import { Table } from "antd";
 const Users = () => {
-  return (
-    <Layout title={"Dashboard - All Users"}>
-      <div className="container-fluid m-3 p-3">
-        <div className="row">
-          <div className="col-md-3">
-            <AdminMenu />
-          </div>
-          <div className="col-md-9">
-            <h1>All Users</h1>
-          </div>
+  const [users, setUsers] = useState([]);
+
+  //getUsers
+  const getUsers = async () => {
+    try {
+      const res = await axios.get("/api/v1/admin/getAllUsers", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (res.data.success) {
+        setUsers(res.data.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  // antD table col
+  const columns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+    },
+    {
+      title: "Doctor",
+      dataIndex: "isDoctor",
+      render: (text, record) => <span>{record.isDoctor ? "Yes" : "No"}</span>,
+    },
+    {
+      title: "Actions",
+      dataIndex: "actions",
+      render: (text, record) => (
+        <div className="d-flex">
+          <button className="btn btn-danger">Block</button>
         </div>
-      </div>
+      ),
+    },
+  ];
+
+  return (
+    <Layout>
+      <h1 className="text-center m-2">Users List</h1>
+      <Table columns={columns} dataSource={users} />
     </Layout>
   );
 };
