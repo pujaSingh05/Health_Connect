@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const appointmentSchema = new mongoose.Schema(
+const appointmentSchema = new mongoose.Schema((
   {
     userId: {
       type: String,
