@@ -3,7 +3,7 @@ const {
   getDoctorInfoController,
   updateProfileController,
   getDoctorByIdController,
-  doctorAppointmentsController,
+  doctorAppointmentsController,,
   updateStatusController,
 } = require("../controllers/doctorController");
 const authMiddleware = require("../middlewares/authMiddleware");
